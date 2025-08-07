@@ -24,8 +24,7 @@ function App() {
     useEffect(() => {
         const intervalo = setInterval(() => {
             conteoSegundos(viejosSegundos => {
-                const nuevosSegundos = viejosSegundos < 59 ? viejosSegundos + 1 : 59;
-                return nuevosSegundos;
+                return viejosSegundos < 999999 ? viejosSegundos + 1 : 0;
             });
         }, 1000);
 
