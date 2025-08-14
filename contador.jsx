@@ -1,8 +1,9 @@
-const { useState, useEffect } = React;
+class SecondsCounter extends React.Component {
+    render() {
+        const segStr = this.props.segundos.toString().padStart(6, '0');
+        const digitos = segStr.split('').map(Number);
+    
 
-function SecondsCounter({ segundos }) {
-    const segStr = segundos.toString().padStart(6, '0');
-    const digitos = segStr.split('').map(Number);
 
     return (
         <div className='barra'>
@@ -17,20 +18,30 @@ function SecondsCounter({ segundos }) {
         </div>
     );
 }
+}
 
-function App() {
-    const [segundos, conteoSegundos] = useState(0);
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            segundos: 0
+        };
+    }
+    componentDidMount() {
+        this.intervalo = setInterval(() => {
+            this.setState(prevState => ({
+            segundos: prevState.segundos < 999999 ? prevState.segundos + 1 : 0
+        }));
+    }, 1000);
+}
 
-    useEffect(() => {
-        const intervalo = setInterval(() => {
-            conteoSegundos(viejosSegundos => {
-                return viejosSegundos < 999999 ? viejosSegundos + 1 : 0;
-            });
-        }, 1000);
+componentWillUnmount() {
+    clearInterval(this.intervalo);
+}
 
-        return () => clearInterval(intervalo);
-    }, []);
-    return <SecondsCounter segundos={segundos} />;
+render() {
+    return <SecondsCounter segundos={this.state.segundos} />;
+}
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
